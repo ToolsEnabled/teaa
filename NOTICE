@@ -1,0 +1,7 @@
+TEAA (ToolsEnabled Agent Architecture) is distributed under the MIT License.
+Copyright (c) 2026 ToolsEnabled, Inc.
+
+Pinned Fleet, ToolsEngine, and Knowledge component sources are included. Their
+upstream license and notice files are retained where supplied. The ToolsEngine
+LICENSE file is preserved with its upstream notice. See components.lock.json
+for component versions and integrity pins.
