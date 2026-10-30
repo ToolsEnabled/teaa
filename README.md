@@ -46,3 +46,10 @@ Register the JSON from `teaa config --server-json` as a stdio MCP server in your
 From this checkout, run `./install.sh` on Linux or `scripts/install.cmd` on native Windows. Node.js 22.19 or newer and Python 3.11 or newer are required; Git is needed for Knowledge repository operations.
 
 See [SETUP.md](SETUP.md) for configuration and first-run details.
+
+## Report a problem or get help
+
+- **Something broken or confusing:** [open an issue](https://github.com/ToolsEnabled/teaa/issues/new/choose) and pick **Report a problem**. Include the version that `teaa doctor` shows and the steps to reproduce. Never paste passwords, tokens, API keys or private keys.
+- **An idea:** open an issue and pick **Suggest an improvement**.
+- **Your toolsenabled.ai account or the hosted service:** email support@toolsenabled.ai.
+- **A security problem:** report it privately as the [security policy](https://github.com/ToolsEnabled/.github/blob/main/SECURITY.md) describes, never in a public issue.
