@@ -3,7 +3,7 @@ import { chmodSync, existsSync, lstatSync, mkdirSync, readFileSync, readdirSync,
 import { dirname, join, resolve, win32 as windowsPath } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { spawnSync } from 'node:child_process';
-import { dataDir, requirePython311, isWindows, which } from './platform.js';
+import { dataDir, selectPython311, isWindows, which } from './platform.js';
 import fleetPins from './fleet-pin.cjs';
 const FLEET_PIN = fleetPins.fleetPin();
 import { verifyRelease } from './install.js';
@@ -139,8 +139,8 @@ export function assertPrivateDataPath(target) { return verifyPrivateDataPath(tar
 
 export function createPrivateDataPath(target) { return verifyPrivateDataPath(target, { create: true }); }
 
-function assertPython311() {
-  return requirePython311();
+function assertPython311(configured) {
+  return selectPython311(configured);
 }
 
 function git(repo, args) {
@@ -246,7 +246,7 @@ export function attachLocalKnowledgeOrigin() {
   return { repo: sample, bare, sync: 'off', already: false, branch: gitAt(sample, ['symbolic-ref', '--short', 'HEAD']) };
 }
 
-export function prepareBundledRuntime({ folder, workers, actor, includeFleet = true, includeEngine = true, includeKnowledge = false, browser = true, root = ROOT } = {}) {
+export function prepareBundledRuntime({ folder, workers, actor, includeFleet = true, includeEngine = true, includeKnowledge = false, knowledgePython = null, browser = true, root = ROOT } = {}) {
   const bundle = bundledInfo(root);
   if (!bundle) return null;
   if (includeFleet || includeKnowledge) assertPrivateDataPath(includeFleet ? bundle.stateRoot : dataDir());
@@ -287,7 +287,8 @@ export function prepareBundledRuntime({ folder, workers, actor, includeFleet = t
     result.fleetStateRoot = bundle.stateRoot;
   }
   if (includeKnowledge) {
-    const python = assertPython311();
+    // A configured knowledge.command is used (after its version check); PATH only without one.
+    const python = assertPython311(knowledgePython);
     const ensured = ensureCustomerKnowledge();
     result.knowledge = { command: python, args: [bundle.knowledge, '--config', ensured.configPath, '--owner-launch'], env: {} };
     result.knowledgeConfig = ensured.configPath;

@@ -37,6 +37,10 @@ Provider CLIs are used only when a person later starts a Fleet worker. Setup doe
 
 On Windows, run `scripts/install.cmd`; it calls the Node installer directly and does not depend on PowerShell script execution policy. Optional flags are `install.cmd --prefix "C:\Tools\TEAA"` and `install.cmd --prefix "C:\Tools\TEAA" --uninstall`. The installer supports `--prefix`, `--uninstall`, and `--add-to-path`; no user or machine PATH change occurs unless the last option is explicitly selected.
 
+## Python runtime for Knowledge
+
+Knowledge needs Python 3.11 or newer. When `knowledge.command` in the TEAA settings file is empty, setup searches `PATH` for it. To use a Python that is not on `PATH` (for example a portable or embeddable Python), set `knowledge.command` to that interpreter's full path and `knowledge.args` to the bundled script `<prefix>/app/<version>/vendor/knowledge/knowledge.py` (on Windows `<prefix>\app\<version>\vendor\knowledge\knowledge.py`), then run `teaa setup`. `teaa config` prints the settings file path. Setup checks that the configured interpreter is Python 3.11 or newer, keeps it, and still creates the sample Knowledge repository and `knowledge-config.json`. If the configured interpreter is missing or older, setup stops and names it; it never substitutes another Python from `PATH`.
+
 ## What the first run creates
 
 Under the TEAA data directory:

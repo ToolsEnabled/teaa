@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "product": "@toolsenabled/teaa",
-  "version": "0.5.0-alpha.5",
+  "version": "0.5.0-alpha.6",
   "fleet": {
     "version": "5.0.0-alpha.13",
     "commit": "2c37a8a82ec35b014e957e3fe2be827658868658",
