@@ -48,6 +48,22 @@ test('MCP startup is shared, failed initialization never remains healthy', async
     const bad = client(mode); await assert.rejects(bad.start()); assert.equal(bad.state, 'failed'); assert.equal(bad.tools.length, 0); await bad.close();
   }
 });
+
+test('bundled V5 worker-mode refusal gives TEAA recovery guidance without rewriting external Fleet errors', async (t) => {
+  const dir = temp(t), refused = join(dir, 'fleet-workers-required.js');
+  writeFileSync(refused, `process.stderr.write('FLEET_V5_WORKERS_REQUIRED: Fleet V5 ordinary lead connections require workers enabled. Re-run Fleet V5 setup without --coordination-only, or use explicit --admin for native administration.'); process.exit(1);`);
+  const upstream = { command: process.execPath, args: [refused] };
+  const bundled = await probe('Fleet', upstream, undefined, { bundledFleet: true });
+  assert.equal(bundled.ok, false);
+  assert.match(bundled.detail, /^FLEET_V5_WORKERS_REQUIRED:/);
+  assert.match(bundled.detail, /teaa setup --workers/);
+  assert.match(bundled.detail, /move it aside without deleting it/i);
+  assert.doesNotMatch(bundled.detail, /Re-run Fleet V5 setup without --coordination-only/);
+
+  const external = await probe('Fleet', upstream, undefined, { bundledFleet: false });
+  assert.equal(external.ok, false);
+  assert.match(external.detail, /Re-run Fleet V5 setup without --coordination-only/);
+});
 test('closing during initialization rejects pending calls and never becomes ready', async () => {
   const c = client('normal'), started = c.start(); const closed = c.close(); await assert.rejects(started, /closed/); await closed; assert.equal(c.state, 'closed');
 });

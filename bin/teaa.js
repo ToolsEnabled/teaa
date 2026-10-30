@@ -16,8 +16,12 @@ Setup: --folder DIR --actor NAME --no-browser --browser --workers
 Run setup from a project folder outside the TEAA install and Fleet state.
 The project is saved for this MCP connection. Browser tools and workers are
 opt-in. --browser uses installed Chrome, Edge or Chromium and does not
-download one. --workers requires a supported agent CLI configured in Fleet.
-Actor names identify ownership, not a model or account; default: local.
+download one. --workers is required for ordinary Fleet V5 contract tools; it
+enables worker capability without starting a worker, model or provider. A
+workers-off Fleet state cannot be changed in place; preserve it and follow the
+FLEET_V5_WORKERS_REQUIRED recovery shown by setup/doctor. Provider CLIs are
+needed only when a person later starts a worker. Actor names identify
+ownership, not a model or account; default: local.
 Knowledge starts as a new local sample repository unless a knowledge config
 already exists. That sample has no origin. --local-knowledge-origin adds a
 bare git repository beside that sample only, pushes the current branch, and

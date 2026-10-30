@@ -137,14 +137,19 @@ async function confirmFleetAudit(cfg) {
   } catch (err) { return { ok: false, detail: err.message }; }
   finally { await client.close(); }
 }
-export async function probe(name, launch, cwd) {
+export async function probe(name, launch, cwd, { bundledFleet = false } = {}) {
   if (!launch) return { name, ok: false, detail: 'not set up (run teaa setup)' };
   const c = new McpClient({ name, ...launch, cwd: cwd ?? launch.cwd, timeoutMs: 45_000 });
   try {
     await c.start();
     if (!c.tools.length) throw new Error('Server connected but offered no tools');
     return { name, ok: true, detail: `${c.serverInfo.name} ${c.serverInfo.version}, ${c.tools.length} tools (MCP connection checked)` };
-  } catch (err) { return { name, ok: false, detail: err.message }; }
+  } catch (err) {
+    const detail = bundledFleet && name === 'Fleet' && /\bFLEET_V5_WORKERS_REQUIRED\b/.test(err.message)
+      ? 'FLEET_V5_WORKERS_REQUIRED: ordinary TEAA requires the Fleet V5 contract tools, but this state was created with workers disabled. Fleet fixes that choice when the state is created. Preserve the existing fleetV5-state folder; to use ordinary TEAA, move it aside without deleting it, then rerun `teaa setup --workers` from the intended project (and pass any original --folder/--actor options). This creates fresh Fleet V5 state and does not import the old state. The --workers option enables worker capability but does not start a worker or provider.'
+      : err.message;
+    return { name, ok: false, detail };
+  }
   finally { await c.close(); }
 }
 async function upstreamChecks(cfg) {
@@ -153,7 +158,7 @@ async function upstreamChecks(cfg) {
     if (!cfg[key].enabled) return { name, ok: true, skipped: true, detail: 'disabled in TEAA settings' };
     try {
       const launch = key === 'fleet' ? fleetLaunch(cfg) : key === 'engine' ? engineLaunch(cfg) : knowledgeLaunch(cfg);
-      return await probe(name, launch);
+      return await probe(name, launch, undefined, { bundledFleet: key === 'fleet' && isBundledFleet(cfg.fleet) });
     }
     catch (err) { return { name, ok: false, detail: err.message }; }
   }));

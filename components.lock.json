@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
   "product": "@toolsenabled/teaa",
-  "version": "0.5.0-alpha.3",
+  "version": "0.5.0-alpha.5",
   "fleet": {
     "version": "5.0.0-alpha.13",
-    "commit": "c2b91cf3c67917b6241a341c164f892f383abb84",
+    "commit": "2c37a8a82ec35b014e957e3fe2be827658868658",
     "platform": "linux-x64",
     "archive": "fleetV5-5.0.0-alpha.13-linux-x64.zip",
-    "archiveSha256": "01874107f6c7009676c28d071f7e47db0ada702148c72ce962d55eef09656418",
-    "identitySha256": "7bd7d33b01d8036b4c427284dbc40d1c2dd2f797514c341ce676633774b75dc0",
+    "archiveSha256": "ec3c4dad3a749f535c421ea16f03a6144c809d52ac9528e13e5f40ae98b2c3cb",
+    "identitySha256": "bfcc1bea8650c767252f794c094076db0c6347b5a87b5a68f0acd358d9981927",
     "runtime": {
       "name": "fleetV5",
       "generation": 5,
@@ -37,7 +37,7 @@
       "securityScript": "vendor/fleet/tools/windows-state-security.ps1",
       "migrationKey": "fleet-v4-to-v5"
     },
-    "packagedFilesSha256": "99706c0328cd38ccf0605f27c43750126969873d21af9afc31057bb6258c0616"
+    "packagedFilesSha256": "c29059cfe09b971fa8e05e317f0f6792cb47862a2abe032b5d68dfc95cf62a7e"
   },
   "toolsengine": {
     "version": "0.2.0-alpha.4",
